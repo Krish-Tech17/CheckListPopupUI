@@ -26,14 +26,10 @@ Yes/No confirmation popup: PopUpHandler.Instance.ShowPopup(title, message, onYes
 
 Checklist data structure:
 
-[System.Serializable]
-public class ChecklistData
-{
-    public string id;
-    public string label;
-    public bool required;
-    public bool alreadychecked;
-}
+id: Unique id against each label.
+label: Options in the checklist.
+required: Labels that are required to be checked before submitting.
+alreadychecked: Labels that are alreadychecked while the checklist is displayed.
 
 =============================
 
