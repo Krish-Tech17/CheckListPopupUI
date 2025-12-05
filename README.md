@@ -1,16 +1,21 @@
-📘 Reusable Popup & Checklist UI Submodule (Unity)
+# 📘 Reusable Popup & Checklist UI Submodule (Unity)
 
-A fully modular, drag-and-drop, and workflow-agnostic UI submodule for Unity projects.
-This package provides two reusable components:
+A fully **modular**, **drag-and-drop**, and **workflow-agnostic** UI submodule for Unity.
 
-Popup System – multiple popup types (OK, Close, Yes/No)
+This package provides two reusable UI systems:
 
-Checklist System – scrollable list with required items, pre-checked items, and callbacks
+* **Popup System** – OK/Close popups, Yes/No confirmations
+* **Checklist System** – scrollable, supports required items, pre-checked items, and callbacks
 
-Suitable for AR/VR workflows, training modules or any system needing standard popups and checklists.
+Suitable for **AR/VR workflows**, **training modules**, **enterprise apps**, or **any Unity system** that requires standard popups and checklists.
 
-This submodule is designed to be independent, clean, and easy to integrate into any Unity project.
+This module is designed to be **independent**, **clean**, and **easy to integrate** into any Unity project.
 
+---
+
+# 📁 Folder Overview
+
+```
 ChecklistPopupUI/
 │
 ├── Prefab/
@@ -37,121 +42,137 @@ ChecklistPopupUI/
 │   └── CloseIcon.png
 │
 └── README.md
+```
 
+---
 
-🌟 Key Features
-✔ Modular & Reusable
+# 🌟 Key Features
 
-Drop the prefab into any Unity Canvas and call the API — no external dependencies.
+### ✔ Modular & Reusable
 
-✔ Three Popup Types
+Drop the prefabs into any Unity Canvas and call the API.
+No dependencies. No setup complexity.
 
-Built-in support for:
+### ✔ Three Popup Types
 
-Close button-only popup
+* **Close Button-only popup**
+* **OK + Close Button popup**
+* **Yes/No confirmation popup**
 
-OK button and close button popup
-
-Yes/No confirmation popup
-
-✔ Checklist System
+### ✔ Checklist System
 
 Includes:
 
-Required items
+* Required items
+* Pre-checked items
+* Scroll View list
+* Automatic item pooling
+* Submit & Close callbacks
 
-Pre-checked items
-
-Scroll View list
-
-Automatic item pooling and instantiation
-
-Submit & close actions
-
-✔ Callback-Based
+### ✔ Callback-Based
 
 Your logic receives:
 
-OnYes
+* `OnYes`, `OnNo`, `OnOk`, `OnClose`
+* `OnChecklistSubmitted`
+* `OnChecklistClosed`
 
-OnNo
+### ✔ Mobile-Friendly & Responsive
 
-OnOk
+Works well for **touchscreens**, **AR**, **VR**, and **small-screen devices**.
 
-OnClose
+---
 
-OnChecklistSubmitted
+# 🧩 Components in Detail
 
-OnChecklistClosed
+## 1️⃣ PopUpHandler.cs
 
-✔ Mobile-Friendly UI
+The **main controller** for popup UI.
 
-Designed for touchscreen workflows and responsive scaling.
+### Responsibilities
 
-🧩 Components in Detail
-1️⃣ PopUpHandler.cs
+* Show/Hide popup
+* Update title & message
+* Connect Close/OK/Yes/No buttons
+* Trigger user callbacks
+* Manage three popup types
 
-The main controller for popup UI.
+### Supported Popup Types
 
-Responsibilities:
+* Close button only
+* OK + Close
+* Yes/No confirmation
 
-Show/Hide popup
+### Public API
 
-Update title & message
+```csharp
+void ShowPopup(
+    string title,
+    string message,
+    Action onOk,
+    Action onClose,
+    bool showOkButton
+);
 
-Connect buttons (Close / OK / Yes / No)
-
-Trigger callback methods
-
-Popup Types Supported:
-
-Simple popup with close button
-
-Simple popup with OK button
-
-Yes/No confirmation popup
-
-Public API:
-void ShowPopup(string title, string message, 
-               Action onOk, Action onClose, bool showOkButton);
-
-void ShowYesNoPopup(string title, string message, 
-                     Action onYes, Action onNo, Action onClose);
+void ShowYesNoPopup(
+    string title,
+    string message,
+    Action onYes,
+    Action onNo,
+    Action onClose
+);
 
 void HidePopup();
+```
 
-2️⃣ ChecklistController.cs
+---
 
-Controls the scrollable checklist panel.
+## 2️⃣ ChecklistController.cs
 
-Responsibilities:
+Controls the scrollable checklist UI.
 
-Generate checklist items
+### Responsibilities
 
-Handle required & pre-checked conditions
+* Generate checklist items dynamically
+* Apply required and pre-checked states
+* Validate submission
+* Trigger Submit/Close callbacks
 
-Submit validation
+### Public API
 
-Call close/submit callbacks
-
-Public API:
-void Show(string title, List<ChecklistData> checklistItems,
-          Action<List<ChecklistData>> onSubmit, Action onClose);
+```csharp
+void Show(
+    string title,
+    List<ChecklistData> checklistItems,
+    Action<List<ChecklistData>> onSubmit,
+    Action onClose
+);
 
 void Hide();
+```
 
-3️⃣ ChecklistData.cs
+---
 
-The data structure for each checklist item.
+## 3️⃣ ChecklistData.cs
 
-Fields:
-public string id;             // Unique ID for each entry
-public string label;          // Visible text in UI
+Represents a single checklist entry.
+
+### Fields
+
+```csharp
+public string id;             // Unique identifier
+public string label;          // Displayed text
 public bool required;         // Must be checked to submit
-public bool alreadychecked;   // Pre-selected state
+public bool alreadychecked;   // Pre-selected
+```
 
-📝 Popup Usage
-✔ Simple popup with close button only
+---
+
+# 📝 Popup Usage
+
+### ✔ Close-only popup
+
+```csharp
 PopUpHandler.Instance.ShowPopup(
     title,
     message,
@@ -159,8 +180,11 @@ PopUpHandler.Instance.ShowPopup(
     OnCloseButtonClicked,
     false
 );
+```
 
-✔ Simple popup with OK button only
+### ✔ OK popup
+
+```csharp
 PopUpHandler.Instance.ShowPopup(
     title,
     message,
@@ -168,8 +192,11 @@ PopUpHandler.Instance.ShowPopup(
     OnCloseButtonClicked,
     true
 );
+```
 
-✔ Yes/No confirmation popup
+### ✔ Yes/No popup
+
+```csharp
 PopUpHandler.Instance.ShowYesNoPopup(
     title,
     message,
@@ -177,150 +204,136 @@ PopUpHandler.Instance.ShowYesNoPopup(
     OnNoButtonClicked,
     OnCloseButtonClicked
 );
+```
 
-🧾 Checklist Data Structure
+---
 
-Each checklist item includes:
+# 🧾 Checklist Data Structure
 
-Field	Description
-id	Unique identifier for the checklist entry
-label	The text shown beside the toggle
-required	Must be checked before submission
-alreadychecked	Pre-selected when checklist opens
-Example:
+### Example Checklist
+
+```csharp
 List<ChecklistData> testList = new List<ChecklistData>()
 {
     new ChecklistData { id="C1", label="Check Battery Status", required=true, alreadychecked=false },
     new ChecklistData { id="C2", label="Clean Camera Lens", required=false, alreadychecked=true },
-    // add more...
 };
+```
 
-📋 Checklist Usage
+---
 
-Display a checklist using:
+# 📋 Checklist Usage
 
+```csharp
 ChecklistController.Instance.Show(
-    "Preflight Checklist", 
-    testList, 
-    OnChecklistSubmitted, 
+    "Preflight Checklist",
+    testList,
+    OnChecklistSubmitted,
     OnChecklistClosed
 );
+```
 
+### Callback Outputs
 
-The callbacks provide:
+* `OnChecklistSubmitted(List<ChecklistData> completedItems)`
+* `OnChecklistClosed()`
 
-OnChecklistSubmitted(List<ChecklistData> completedItems)
+---
 
-OnChecklistClosed()
+# 🔧 Integration Steps
 
-🔧 Integration Steps
-Step 1 — Add Prefabs to Canvas
+## **Step 1 — Add Prefabs to Canvas**
 
-Drag these into your scene:
+Drag these into any Canvas:
 
-Popup.prefab
+* `PopupPrefab.prefab`
+* `ChecklistPanel.prefab`
 
-ChecklistPanel.prefab
+Keep them **enabled** but visually hidden (handled by script).
 
-Ensure both remain active in the hierarchy (can start hidden).
+---
 
-Step 2 — Assign Script References
+## **Step 2 — Ensure Singleton Instances Exist**
 
-Both handlers use singleton logic (Instance), so no configuration is required beyond ensuring one instance exists.
+Both:
 
-Step 3 — Call the Public APIs
+* `PopUpHandler`
+* `ChecklistController`
 
-From any script:
+use singleton patterns.
+As long as one copy exists in the scene, the system will work.
 
-Show a popup:
+---
+
+## **Step 3 — Call Public APIs**
+
+### Show a popup:
+
+```csharp
 PopUpHandler.Instance.ShowPopup("Alert", "Task saved!", null, null, true);
+```
 
-Show a checklist:
-ChecklistController.Instance.Show("Checklist", testList, SubmitCallback, CloseCallback);
+### Show a checklist:
 
-🎬 (Optional) Demo Scene
+```csharp
+ChecklistController.Instance.Show(
+    "Checklist",
+    testList,
+    SubmitCallback,
+    CloseCallback
+);
+```
 
-The included UIReusable_Demo.unity demonstrates:
+---
 
-Showing popups of all types
+# 🎬 Demo Scene
 
-Displaying checklists
+`Demo_Reusable Popup Checklist.unity`
 
-Submitting & closing logic
+Shows:
 
-Useful for onboarding developers into the UI module workflow.
+* All popup variations
+* Checklist logic
+* Submit & Close flow
 
-🧠 Design Philosophy
+Useful for onboarding and understanding the UI lifecycle.
 
-This submodule is built with clarity, reusability, and independence in mind.
+---
 
-✔ UI separated from logic
+# 🧠 Design Philosophy
 
-Popup & checklist visuals remain generic and reusable.
+### ✔ UI separated from logic
 
-✔ Callback-driven
+The visual elements remain generic and reusable.
 
-Your workflow receives events without modifying the core scripts.
+### ✔ Callback-driven
 
-✔ No dependencies
+Workflows receive events without altering core scripts.
+
+### ✔ Zero dependencies
 
 Works across:
 
-AR Foundation
+* AR Foundation
+* VR
+* Mobile
+* Desktop
 
-VR
+### ✔ Extensible
 
-Mobile
+Add animations, audio, or themes without changing main scripts.
 
-Desktop
+---
 
-Hybrid workflows
+# 🏁 Conclusion
 
-✔ Easy to extend
-
-Add animations, transitions, or sound effects without modifying core code.
-
-📁 Folder Overview
-ChecklistPopupUI/
-│
-├── Prefab/
-│   ├── ChecklistItem.prefab
-│   ├── ChecklistPanel.prefab
-│   └── PopupPrefab.prefab
-│
-├── Scenes/
-│   └── Demo_Reusable Popup Checklist.unity
-│
-├── Script/
-│   ├── Checklist/
-│   │   ├── ChecklistController.cs
-│   │   ├── ChecklistItemPool.cs
-│   │   ├── ChecklistItemUI.cs
-│   │   └── LoadData.cs
-│   │
-│   ├── Popup/
-│   │   ├── Debugger.cs
-│   │   └── PopUpHandler.cs
-│
-├── UI/
-│   ├── ButtonLayout.png
-│   └── CloseIcon.png
-│
-└── README.md
-
-
-🏁 Conclusion
-
-The Popup & Checklist Submodule provides:
+The **Popup & Checklist Submodule** provides:
 
 ✔ Ready-to-use UI
-
 ✔ Clean and flexible API
-
 ✔ Multiple popup types
-
-✔ Scrollable checklist with required/pre-checked logic
-
+✔ Scrollable checklist system
+✔ Required/pre-checked logic
 ✔ Reusable prefab structure
-
 ✔ Zero dependencies
+✔ Easy integration into any Unity workflow
